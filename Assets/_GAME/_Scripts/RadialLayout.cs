@@ -1,0 +1,117 @@
+using System.Collections.Generic;
+using DG.Tweening;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public class RadialLayout : MonoBehaviour
+{
+    [SerializeField] private float anglePivot;
+    [SerializeField] private float maxRange;
+    [SerializeField] private Vector2 _ellipseSize;
+    [SerializeField] private int _maxItems;
+    [SerializeField] private List<Transform> _items = new List<Transform>();
+    [SerializeField] private float animDuration;
+    [SerializeField] private Ease animEase;
+    
+    private float _startAngle;
+    private float _endAngle;
+
+    public void AddItem(Transform itemToAdd)
+    {
+        _items.Add(itemToAdd);
+        itemToAdd.SetParent(transform);
+        UpdateItemPositions();
+    }
+
+    public void RemoveItem(Transform itemToRemove)
+    {
+        if (_items.Remove(itemToRemove))
+        {
+            itemToRemove.DOKill(); //TODO we might want to remove this if we want to have some other animation when removing cards
+            UpdateItemPositions();
+        }
+    }
+
+    private void UpdateItemPositions()
+    {
+        //We want a single card to be centered, but more than one should be spread
+        int count = _items.Count <= 1 ? 0 : _items.Count;
+        
+        //here we redefine the range of the spread accordingly to the amount of cards
+        float currentRange = Mathf.Lerp(0, maxRange, count / (float) _maxItems);
+        _startAngle = anglePivot - (currentRange / 2f);
+        _endAngle = _startAngle + currentRange;
+        
+        //If we only have one card, we can't subtract or else we'd be trying to divide by zero
+        int correction = _items.Count <= 1 ? 0 : 1;
+        float step = (_endAngle - _startAngle) / (float)(_items.Count - correction);
+        
+        for (int i = 0; i < _items.Count; i++)
+        {
+            var item = _items[i];
+            
+            float cardAngleDeg = _startAngle + (step * i);
+            float cardAngleRad = cardAngleDeg * Mathf.Deg2Rad;
+            var cardOffset = new Vector3();
+            cardOffset.x = Mathf.Cos(cardAngleRad) * _ellipseSize.x;
+            cardOffset.y = Mathf.Sin(cardAngleRad) * _ellipseSize.y;
+            // item.position = transform.position + cardOffset;
+            // item.up = cardOffset.normalized;
+
+            item.DOMove(transform.position + cardOffset, animDuration)
+                .SetEase(animEase);
+            item.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, animDuration)
+                .SetEase(animEase);
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+        {
+            UpdateItemPositions();
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+            float currentRange = Mathf.Lerp(0, maxRange, _items.Count / (float) _maxItems);
+            DrawArc(currentRange, Color.white, 5);
+        }
+        else
+        {
+            DrawArc(maxRange, Color.white, 2);
+        }
+    }
+
+    private void DrawArc(float range, Color color, float thickness)
+    {
+        Handles.color = color;
+        int arcResolution = 20;
+
+        float currentRange = range;
+        float arcStart = anglePivot - (currentRange / 2f);
+        float arcEnd = arcStart + currentRange;
+        
+        float step = (arcEnd - arcStart) / (float)arcResolution;
+        float previousAngle = arcStart;
+        
+        for (float angle = arcStart + step; angle < arcEnd + step; angle += step)
+        {
+            float angleRad = angle * Mathf.Deg2Rad;
+            float previousAngleRad = previousAngle * Mathf.Deg2Rad;
+            
+            var startPoint = new Vector3(Mathf.Cos(previousAngleRad) * _ellipseSize.x, Mathf.Sin(previousAngleRad) * _ellipseSize.y);
+            var endPoint = new Vector3(Mathf.Cos(angleRad) * _ellipseSize.x, Mathf.Sin(angleRad) * _ellipseSize.y);
+            
+            Handles.DrawLine(transform.position + startPoint, transform.position + endPoint, thickness);
+            previousAngle = angle;
+        }
+    }
+#endif
+}
