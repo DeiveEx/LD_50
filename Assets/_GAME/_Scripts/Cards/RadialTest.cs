@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 public class RadialTest : MonoBehaviour
 {
     [SerializeField] private Transform _cardPrefab;
+    [SerializeField] private int _startAmount;
     [SerializeField] private RadialLayout _radialLayout;
     [SerializeField] private Transform _cardOrigin;
 
@@ -22,6 +23,14 @@ public class RadialTest : MonoBehaviour
         _radialLayout.onItemAddedSuccess += (sender, card) => Debug.Log("Card added");
         _radialLayout.onItemAddedFailed += (sender, card) => Debug.Log("Card could not be added");
         _radialLayout.onItemRemoved += (sender, card) => Debug.Log("Card removed");
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < _startAmount; i++)
+        {
+            AddCard();
+        }
     }
 
     private void Update()
@@ -45,7 +54,8 @@ public class RadialTest : MonoBehaviour
             _cards.Add(card);
             
             //TODO remove later
-            card.GetComponentInChildren<TMP_Text>().text = $"Card {cardCount++}";
+            card.name = $"Card {cardCount++}";
+            card.GetComponentInChildren<TMP_Text>().text = card.name;
         }
         else
         {

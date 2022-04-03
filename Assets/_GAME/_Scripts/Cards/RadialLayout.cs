@@ -84,9 +84,11 @@ public class RadialLayout : MonoBehaviour
             // item.up = cardOffset.normalized;
 
             item.DOMove(transform.position + cardOffset, _animDuration)
-                .SetEase(_animEase);
+                .SetEase(_animEase)
+                .Play();
             item.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, _animDuration)
-                .SetEase(_animEase);
+                .SetEase(_animEase)
+                .Play();
         }
     }
 

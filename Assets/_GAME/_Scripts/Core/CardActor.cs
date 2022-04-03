@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,8 +20,7 @@ public struct FAttributeSetup
 /// Card Actor is a class that carries all card setup information. It should
 /// be used as main component to all cards that exists in the game. 
 /// </summary>
-[ExecuteInEditMode]
-public class CardActor : MonoBehaviour
+public class CardActor : MonoBehaviour, IHoverable
 {
      
     [Header("Prefab References")]
@@ -30,8 +31,10 @@ public class CardActor : MonoBehaviour
     //Reference to the Card's Name's UI Text Object
     public TMP_Text _nameTextObj;
 
-    //Reference to the Card's Descríption's UI Text Object
+    //Reference to the Card's Descrï¿½ption's UI Text Object
     public TMP_Text _descTextObj;
+    
+    public GameObject _visual;
 
     [Header("Card Setup")]
     public string CardName;
@@ -45,6 +48,8 @@ public class CardActor : MonoBehaviour
     //Reference the the player this Card belongs.
     private PlayerController _owner;
 
+    private Sequence _hoverTween;
+
     /// <summary>
     /// Return the player that owns this card. (This can be used to create special effects that requires player actions like draw a card.
     /// </summary>
@@ -54,13 +59,46 @@ public class CardActor : MonoBehaviour
         return _owner;
     }
 
-    private void Update()
+    private void OnValidate()
     {
         if (!Application.isPlaying)
         {
-            _cardImageObj.sprite = CardImage;
-            _nameTextObj.text = CardName;
-            _descTextObj.text = Description;
+            if(CardImage != null)
+                _cardImageObj.sprite = CardImage;
+            
+            if(!string.IsNullOrEmpty(CardName))
+                _nameTextObj.text = CardName;
+            
+            if(!string.IsNullOrEmpty(Description))
+                _descTextObj.text = Description;
         }
+    }
+
+    public void OnStartHover()
+    {
+        if (_hoverTween != null)
+        {
+            _hoverTween.Kill();
+        }
+
+        _hoverTween = DOTween.Sequence();
+        _hoverTween
+            .Append(_visual.transform.DOScale(Vector3.one * 2, .5f))
+            .Insert(0, _visual.transform.DOLocalMove(new Vector3(0, 1, -5), .25f))
+            .Play();
+    }
+
+    public void OnEndHover()
+    {
+        if (_hoverTween != null)
+        {
+            _hoverTween.Kill();
+        }
+        
+        _hoverTween = DOTween.Sequence();
+        _hoverTween
+            .Append(_visual.transform.DOScale(Vector3.one, .5f))
+            .Insert(0, _visual.transform.DOLocalMove(Vector3.zero, .25f))
+            .Play();
     }
 }
