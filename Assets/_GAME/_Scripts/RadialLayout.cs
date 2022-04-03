@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -7,22 +8,42 @@ using UnityEditor;
 
 public class RadialLayout : MonoBehaviour
 {
-    [SerializeField] private float anglePivot;
-    [SerializeField] private float maxRange;
+    [SerializeField] private float _anglePivot;
+    [SerializeField] private float _maxRange;
     [SerializeField] private Vector2 _ellipseSize;
     [SerializeField] private int _maxItems;
-    [SerializeField] private List<Transform> _items = new List<Transform>();
-    [SerializeField] private float animDuration;
-    [SerializeField] private Ease animEase;
+    [SerializeField] private float _zOffset;
+    [SerializeField] private float _animDuration;
+    [SerializeField] private Ease _animEase;
     
+    private List<Transform> _items = new List<Transform>();
     private float _startAngle;
     private float _endAngle;
 
-    public void AddItem(Transform itemToAdd)
+    public List<Transform> Items => _items;
+    public int MaxItems
     {
+        get => _maxItems;
+        set => _maxItems = value;
+    }
+
+    public event EventHandler<Transform> onItemAddedSuccess;
+    public event EventHandler<Transform> onItemRemoved;
+    public event EventHandler<Transform> onItemAddedFailed;
+
+    public bool AddItem(Transform itemToAdd)
+    {
+        if (_items.Count >= _maxItems)
+        {
+            onItemAddedFailed?.Invoke(this, itemToAdd);
+            return false;
+        }
+        
         _items.Add(itemToAdd);
         itemToAdd.SetParent(transform);
         UpdateItemPositions();
+        onItemAddedSuccess?.Invoke(this, itemToAdd);
+        return true;
     }
 
     public void RemoveItem(Transform itemToRemove)
@@ -31,6 +52,7 @@ public class RadialLayout : MonoBehaviour
         {
             itemToRemove.DOKill(); //TODO we might want to remove this if we want to have some other animation when removing cards
             UpdateItemPositions();
+            onItemRemoved?.Invoke(this, itemToRemove);
         }
     }
 
@@ -40,8 +62,8 @@ public class RadialLayout : MonoBehaviour
         int count = _items.Count <= 1 ? 0 : _items.Count;
         
         //here we redefine the range of the spread accordingly to the amount of cards
-        float currentRange = Mathf.Lerp(0, maxRange, count / (float) _maxItems);
-        _startAngle = anglePivot - (currentRange / 2f);
+        float currentRange = Mathf.Lerp(0, _maxRange, count / (float) _maxItems);
+        _startAngle = _anglePivot - (currentRange / 2f);
         _endAngle = _startAngle + currentRange;
         
         //If we only have one card, we can't subtract or else we'd be trying to divide by zero
@@ -57,13 +79,14 @@ public class RadialLayout : MonoBehaviour
             var cardOffset = new Vector3();
             cardOffset.x = Mathf.Cos(cardAngleRad) * _ellipseSize.x;
             cardOffset.y = Mathf.Sin(cardAngleRad) * _ellipseSize.y;
+            cardOffset.z = _zOffset * i;
             // item.position = transform.position + cardOffset;
             // item.up = cardOffset.normalized;
 
-            item.DOMove(transform.position + cardOffset, animDuration)
-                .SetEase(animEase);
-            item.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, animDuration)
-                .SetEase(animEase);
+            item.DOMove(transform.position + cardOffset, _animDuration)
+                .SetEase(_animEase);
+            item.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, _animDuration)
+                .SetEase(_animEase);
         }
     }
 
@@ -80,12 +103,12 @@ public class RadialLayout : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            float currentRange = Mathf.Lerp(0, maxRange, _items.Count / (float) _maxItems);
+            float currentRange = Mathf.Lerp(0, _maxRange, _items.Count / (float) _maxItems);
             DrawArc(currentRange, Color.white, 5);
         }
         else
         {
-            DrawArc(maxRange, Color.white, 2);
+            DrawArc(_maxRange, Color.white, 2);
         }
     }
 
@@ -95,7 +118,7 @@ public class RadialLayout : MonoBehaviour
         int arcResolution = 20;
 
         float currentRange = range;
-        float arcStart = anglePivot - (currentRange / 2f);
+        float arcStart = _anglePivot - (currentRange / 2f);
         float arcEnd = arcStart + currentRange;
         
         float step = (arcEnd - arcStart) / (float)arcResolution;

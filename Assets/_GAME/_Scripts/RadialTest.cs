@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class RadialTest : MonoBehaviour
 {
@@ -10,7 +12,14 @@ public class RadialTest : MonoBehaviour
 
     private List<Transform> _cards = new List<Transform>();
     private int cardCount;
-    
+
+    private void Awake()
+    {
+        _radialLayout.onItemAddedSuccess += (sender, card) => Debug.Log("Card added");
+        _radialLayout.onItemAddedFailed += (sender, card) => Debug.Log("Card could not be added");
+        _radialLayout.onItemRemoved += (sender, card) => Debug.Log("Card removed");
+    }
+
     private void Update()
     {
         if(Keyboard.current[Key.A].wasPressedThisFrame)
@@ -22,12 +31,20 @@ public class RadialTest : MonoBehaviour
 
     private void AddCard()
     {
+        //Ideally we would check if the amount of cards already reached the limit, but I wanna test the events
         Transform card = Instantiate(_cardPrefab);
-        _radialLayout.AddItem(card);
-        _cards.Add(card);
-        
-        //TODO remove later
-        card.GetComponentInChildren<TMP_Text>().text = $"Card {cardCount++}";
+
+        if (_radialLayout.AddItem(card))
+        {
+            _cards.Add(card);
+            
+            //TODO remove later
+            card.GetComponentInChildren<TMP_Text>().text = $"Card {cardCount++}";
+        }
+        else
+        {
+            Destroy(card.gameObject);
+        }
     }
 
     private void RemoveCard()
