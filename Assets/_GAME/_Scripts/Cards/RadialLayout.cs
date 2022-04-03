@@ -56,7 +56,7 @@ public class RadialLayout : MonoBehaviour
         }
     }
 
-    private void UpdateItemPositions()
+    public void UpdateItemPositions()
     {
         //We want a single card to be centered, but more than one should be spread
         int count = _items.Count <= 1 ? 0 : _items.Count;
