@@ -58,7 +58,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxCards: 3
-  _spacing: 1
+  _spacing: 2
   _hoverScale: 1.5
+  _hoverOffset: {x: 0, y: 0, z: -5}
   _animDuration: 0.25
   _animEase: 0
+  _allowGrabbing: 0

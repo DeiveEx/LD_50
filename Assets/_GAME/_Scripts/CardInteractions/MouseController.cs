@@ -47,10 +47,13 @@ public class MouseController : MonoBehaviour
 
     private void ClickWithoutCard()
     {
-        if (_lastHit != null && _lastHit.TryGetComponent(out CardActor card))
+        if (_lastHit != null &&
+            _lastHit.TryGetComponent(out CardActor card) &&
+            card.currentHolder.AllowGrabbing)
         {
             _heldCard = card;
             TryDoGrab(_heldCard.gameObject, true);
+            _lastHit = null;
         }
     }
 
@@ -72,8 +75,9 @@ public class MouseController : MonoBehaviour
             if (_lastHit != null)
             {
                 TryDoHover(_lastHit, false);
-                _lastHit = null;
             }
+            
+            _lastHit = null;
         }
     }
 

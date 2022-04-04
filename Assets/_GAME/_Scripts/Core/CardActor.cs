@@ -92,8 +92,8 @@ public class CardActor : MonoBehaviour, IHoverable, IGrabable
         _isBeingHovered = true;
         var sequence = DOTween.Sequence();
         sequence
-            .Append(_visual.transform.DOScale(Vector3.one * currentHolder.HoverScale, hoverAnimDuration));
-            // .Insert(0, _visual.transform.DOLocalMove(new Vector3(0, 1, -5), hoverAnimDuration));
+            .Append(_visual.transform.DOScale(Vector3.one * currentHolder.HoverScale, hoverAnimDuration))
+            .Insert(0, _visual.transform.DOLocalMove(currentHolder.HoverOffset, hoverAnimDuration));
             
         _hoverTween = sequence.Play();
     }
@@ -108,8 +108,8 @@ public class CardActor : MonoBehaviour, IHoverable, IGrabable
         _isBeingHovered = false;
         var sequence = DOTween.Sequence();
         sequence
-            .Append(_visual.transform.DOScale(Vector3.one, hoverAnimDuration));
-            // .Insert(0, _visual.transform.DOLocalMove(Vector3.zero, hoverAnimDuration));
+            .Append(_visual.transform.DOScale(Vector3.one, hoverAnimDuration))
+            .Insert(0, _visual.transform.DOLocalMove(Vector3.zero, hoverAnimDuration));
             
         _hoverTween = sequence.Play();
     }

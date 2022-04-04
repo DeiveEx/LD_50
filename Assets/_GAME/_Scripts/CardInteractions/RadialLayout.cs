@@ -13,9 +13,11 @@ public class RadialLayout : MonoBehaviour, ICardHolder
     [SerializeField] private Vector2 _ellipseSize;
     [SerializeField] private int _maxItems;
     [SerializeField] private float _hoverScale = 2;
+    [SerializeField] private Vector3 _hoverOffeset = new Vector3(0, 0, -5);
     [SerializeField] private float _zOffset;
     [SerializeField] private float _animDuration;
     [SerializeField] private Ease _animEase;
+    [SerializeField] private bool _allowGrabbing = true;
     
     private List<CardActor> _cards = new List<CardActor>();
     private float _startAngle;
@@ -23,6 +25,9 @@ public class RadialLayout : MonoBehaviour, ICardHolder
 
     public IList<CardActor> Cards => _cards;
     public float HoverScale => _hoverScale;
+    public Vector3 HoverOffset => _hoverOffeset;
+    public bool AllowGrabbing => _allowGrabbing;
+
     public int MaxItems
     {
         get => _maxItems;

@@ -8,13 +8,17 @@ public class CardSlot : MonoBehaviour, ICardHolder
     [SerializeField] private int _maxCards = 1;
     [SerializeField] private float _spacing;
     [SerializeField] private float _hoverScale = 1;
+    [SerializeField] private Vector3 _hoverOffset = new Vector3(0, 0, -5);
     [SerializeField] private float _animDuration;
     [SerializeField] private Ease _animEase;
+    [SerializeField] private bool _allowGrabbing;
 
     private List<CardActor> _cards = new List<CardActor>();
     
     public IList<CardActor> Cards => _cards;
     public float HoverScale => _hoverScale;
+    public Vector3 HoverOffset => _hoverOffset;
+    public bool AllowGrabbing => _allowGrabbing;
 
     public bool AddCard(CardActor card)
     {
@@ -51,7 +55,7 @@ public class CardSlot : MonoBehaviour, ICardHolder
     
     public virtual void UpdateCardPositions()
     {
-        float range = _cards.Count * _spacing;
+        float range = (_cards.Count - 1) * _spacing;
         
         for (int i = 0; i < _cards.Count; i++)
         {
