@@ -1,14 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class CardSlot : MonoBehaviour, ICardHolder
 {
     [SerializeField] private int _maxCards = 1;
     [SerializeField] private float _spacing;
-    [SerializeField] private List<CardActor> _cards = new List<CardActor>();
+    [SerializeField] private float _hoverScale = 1;
+    [SerializeField] private float _animDuration;
+    [SerializeField] private Ease _animEase;
 
+    private List<CardActor> _cards = new List<CardActor>();
+    
     public IList<CardActor> Cards => _cards;
+    public float HoverScale => _hoverScale;
 
     public bool AddCard(CardActor card)
     {
@@ -18,8 +24,8 @@ public class CardSlot : MonoBehaviour, ICardHolder
         _cards.Add(card);
         card.transform.SetParent(transform);
         card.currentHolder = this;
-        OnCardAdded(card);
         UpdateCardPositions();
+        OnCardAdded(card);
         return true;
     }
 
@@ -27,8 +33,8 @@ public class CardSlot : MonoBehaviour, ICardHolder
     {
         if (_cards.Remove(card))
         {
-            OnCardRemoved(card);
             UpdateCardPositions();
+            OnCardRemoved(card);
         }
 
         return false;
@@ -53,8 +59,11 @@ public class CardSlot : MonoBehaviour, ICardHolder
             var offset = new Vector3(
                 (_spacing * i) - (range / 2f),
                 0,
-                .1f * i);
-            card.transform.position = transform.position + offset;
+                1 + (.1f * i));
+            
+            card.transform.DOMove(transform.position + offset, _animDuration)
+                .SetEase(_animEase)
+                .Play();
         }
     }
 

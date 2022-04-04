@@ -12,6 +12,7 @@ public class RadialLayout : MonoBehaviour, ICardHolder
     [SerializeField] private float _maxRange;
     [SerializeField] private Vector2 _ellipseSize;
     [SerializeField] private int _maxItems;
+    [SerializeField] private float _hoverScale = 2;
     [SerializeField] private float _zOffset;
     [SerializeField] private float _animDuration;
     [SerializeField] private Ease _animEase;
@@ -21,6 +22,7 @@ public class RadialLayout : MonoBehaviour, ICardHolder
     private float _endAngle;
 
     public IList<CardActor> Cards => _cards;
+    public float HoverScale => _hoverScale;
     public int MaxItems
     {
         get => _maxItems;
@@ -85,21 +87,19 @@ public class RadialLayout : MonoBehaviour, ICardHolder
         
         for (int i = 0; i < _cards.Count; i++)
         {
-            var item = _cards[i];
-            
+            var card = _cards[i];
             float cardAngleDeg = _startAngle + (step * i);
             float cardAngleRad = cardAngleDeg * Mathf.Deg2Rad;
+            
             var cardOffset = new Vector3();
             cardOffset.x = Mathf.Cos(cardAngleRad) * _ellipseSize.x;
             cardOffset.y = Mathf.Sin(cardAngleRad) * _ellipseSize.y;
             cardOffset.z = _zOffset * i;
-            // item.position = transform.position + cardOffset;
-            // item.up = cardOffset.normalized;
 
-            item.transform.DOMove(transform.position + cardOffset, _animDuration)
+            card.transform.DOMove(transform.position + cardOffset, _animDuration)
                 .SetEase(_animEase)
                 .Play();
-            item.transform.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, _animDuration)
+            card.transform.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, _animDuration)
                 .SetEase(_animEase)
                 .Play();
         }

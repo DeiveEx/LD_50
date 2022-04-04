@@ -5,6 +5,7 @@ using UnityEngine;
 public interface ICardHolder
 {
     public IList<CardActor> Cards { get; }
+    public float HoverScale { get; }
 
     public bool AddCard(CardActor card);
     public bool RemoveCard(CardActor card);
