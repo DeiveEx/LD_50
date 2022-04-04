@@ -2,21 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DishActor : MonoBehaviour
+[CreateAssetMenu]
+public class SORecipe : ScriptableObject
 {
-    public int TurnsToCook
-    {
-        get
-        {
-            return recipe != null ? recipe.turns : 9;
-        }
-    }
+    public string dishName;
 
-    public SORecipe recipe;
+    public List<FAttributeSetup> ingredients;
 
-    [SerializeField] List<FAttributeSetup> ingredientsUsed;
+    public int turns;
+    public int reward;
 
-    [SerializeField] FAttributeSetup test;
+    public Sprite image;
+
+
+    // Gameplay Stuff
+    public List<FAttributeSetup> ingredientsUsed;
+
 
     // Functions
 
@@ -24,7 +25,7 @@ public class DishActor : MonoBehaviour
     {
         for (int i = 0; i < ingredientsUsed.Count; i++)
         {
-            if(ingredientsUsed[i].Attribute == ingredient.Attribute)
+            if (ingredientsUsed[i].Attribute == ingredient.Attribute)
             {
                 var newAttribute = ingredientsUsed[i];
 
@@ -42,11 +43,11 @@ public class DishActor : MonoBehaviour
     {
 
         // For each recipe ingredient
-        for (int i = 0; i < recipe.ingredients.Count; i++)
+        for (int i = 0; i < ingredientsUsed.Count; i++)
         {
-            if(ingredientsUsed.Count == 0)
+            if (ingredientsUsed.Count == 0)
             {
-                print("No Ingredient used");
+                Debug.Log("No Ingredient used");
                 return false;
             }
 
@@ -55,20 +56,20 @@ public class DishActor : MonoBehaviour
             //For Each Ingredient Used
             for (int k = 0; k < ingredientsUsed.Count; k++)
             {
-                if(recipe.ingredients[i].Attribute != ingredientsUsed[k].Attribute )
+                if (ingredientsUsed[i].Attribute != ingredientsUsed[k].Attribute)
                 {
                     continue;
                 }
 
-                if (recipe.ingredients[i].Value <= ingredientsUsed[k].Value)
+                if (ingredientsUsed[i].Value <= ingredientsUsed[k].Value)
                 {
-                    Debug.Log("Enought " + recipe.ingredients[i].Attribute);
+                    Debug.Log("Enought " + ingredientsUsed[i].Attribute);
                     ingredientFound = true;
                     break;
                 }
                 else
                 {
-                    Debug.Log("Not Enought Ingredients: " + recipe.ingredients[i].Attribute);
+                    Debug.Log("Not Enought Ingredients: " + ingredientsUsed[i].Attribute);
                     return false;
                 }
             }
@@ -76,13 +77,12 @@ public class DishActor : MonoBehaviour
             if (!ingredientFound)
             {
                 //No Match
-                print("Ingredient Missing: " + recipe.ingredients[i].Attribute);
+                Debug.Log("Ingredient Missing: " + ingredientsUsed[i].Attribute);
                 return false;
             }
         }
 
-        print("Recipe Completed");
+        Debug.Log("Recipe Completed");
         return true;
     }
-
 }

@@ -102,8 +102,9 @@ GameObject:
   - component: {fileID: 8324048150391850446}
   - component: {fileID: 8705662200701187719}
   - component: {fileID: 7120249116293148253}
+  - component: {fileID: -6650955564731225003}
   m_Layer: 5
-  m_Name: CardPrefab
+  m_Name: CardUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,6 +196,29 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &-6650955564731225003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580138823740283508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a06c4aea71a21d144b8a32600b9eeb0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardImageObj: {fileID: 0}
+  _nameTextObj: {fileID: 0}
+  _descTextObj: {fileID: 0}
+  _visual: {fileID: 0}
+  _collider: {fileID: 0}
+  CardName: 
+  CardImage: {fileID: 0}
+  Description: 
+  hoverAnimDuration: 0
+  grabAnimDuration: 0
+  Attributes: []
 --- !u!1 &1618702443506843714
 GameObject:
   m_ObjectHideFlags: 0
