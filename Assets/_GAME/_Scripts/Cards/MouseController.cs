@@ -7,11 +7,11 @@ using UnityEngine.InputSystem;
 
 public class MouseController : MonoBehaviour
 {
-    [SerializeField] private LayerMask cardMask;
+    [SerializeField] private LayerMask _cardMask;
+    [SerializeField] private LayerMask _slotMask;
     [SerializeField] private RadialLayout _radialLayout;
     [SerializeField] private float _cardFollowSpeed;
-    [SerializeField] private float _animDuration;
-    [SerializeField] private float _heldZ;
+    [SerializeField] private float _heldPositionZ;
 
     private GameObject _lastHit;
     private CardActor _heldCard;
@@ -24,27 +24,39 @@ public class MouseController : MonoBehaviour
 
     void Update()
     {
+        Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
         if (_heldCard != null)
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                _heldCard.DOKill();
-                _heldCard = null;
-                _radialLayout.UpdateItemPositions();
+                if (Physics.Raycast(ray, out RaycastHit hit, 100, _slotMask) &&
+                    hit.collider.TryGetComponent(out CardSlot slot) &&
+                    slot.TryAddCardToSlot(_heldCard))
+                {
+                    _radialLayout.RemoveItem(_heldCard.transform);
+                    _radialLayout.UpdateItemPositions();
+                    TryDoGrab(_heldCard.gameObject, false);
+                    _heldCard = null;
+                }
+                else
+                {
+                    TryDoGrab(_heldCard.gameObject, false);
+                    _heldCard = null;
+                    _radialLayout.UpdateItemPositions();
+                }
             }
             else
             {
                 Vector3 targetPos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                targetPos.z = _heldZ;
+                targetPos.z = _heldPositionZ;
 
                 _heldCard.transform.position = Vector3.Lerp(_heldCard.transform.position, targetPos, _cardFollowSpeed * Time.deltaTime);
             }
         }
         else
         {
-            Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
-    
-            if (Physics.Raycast(ray, out RaycastHit hit, 100, cardMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, 100, _cardMask))
             {   
                 if (_lastHit != hit.collider.gameObject)
                 {
@@ -56,10 +68,7 @@ public class MouseController : MonoBehaviour
                 if (Mouse.current.leftButton.wasPressedThisFrame && hit.collider.TryGetComponent(out CardActor card))
                 {
                     _heldCard = card;
-                    TryDoHover(_heldCard.gameObject, false);
-                    _heldCard.transform
-                        .DORotate(Quaternion.identity.eulerAngles, _animDuration)
-                        .Play();
+                    TryDoGrab(_heldCard.gameObject, true);
                 }
             }
             else
@@ -73,17 +82,32 @@ public class MouseController : MonoBehaviour
         }
     }
 
-    private void TryDoHover(GameObject obj, bool startHover)
+    private void TryDoHover(GameObject obj, bool isHovering)
     {
         if (obj != null && obj.TryGetComponent(out IHoverable hoverObj))
         {
-            if (startHover)
+            if (isHovering)
             {
                 hoverObj.OnStartHover();
             }
             else
             {
                 hoverObj.OnEndHover();
+            }
+        }
+    }
+
+    private void TryDoGrab(GameObject obj, bool isGrabbing)
+    {
+        if (obj != null && obj.TryGetComponent(out IGrabable hoverObj))
+        {
+            if (isGrabbing)
+            {
+                hoverObj.OnGrab();
+            }
+            else
+            {
+                hoverObj.OnRelease();
             }
         }
     }

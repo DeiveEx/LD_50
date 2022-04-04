@@ -20,7 +20,7 @@ public struct FAttributeSetup
 /// Card Actor is a class that carries all card setup information. It should
 /// be used as main component to all cards that exists in the game. 
 /// </summary>
-public class CardActor : MonoBehaviour, IHoverable
+public class CardActor : MonoBehaviour, IHoverable, IGrabable
 {
      
     [Header("Prefab References")]
@@ -35,6 +35,8 @@ public class CardActor : MonoBehaviour, IHoverable
     public TMP_Text _descTextObj;
     
     public GameObject _visual;
+    
+    public Collider _collider;
 
     [Header("Card Setup")]
     public string CardName;
@@ -42,13 +44,17 @@ public class CardActor : MonoBehaviour, IHoverable
     public Sprite CardImage;
 
     public string Description;
+    public float hoverAnimDuration;
+    public float grabAnimDuration;
 
     public List<FAttributeSetup> Attributes;
 
     //Reference the the player this Card belongs.
     private PlayerController _owner;
 
-    private Sequence _hoverTween;
+    private Tween _hoverTween;
+    private bool _isBeingHovered;
+    private Tween _grabTween;
 
     /// <summary>
     /// Return the player that owns this card. (This can be used to create special effects that requires player actions like draw a card.
@@ -76,16 +82,19 @@ public class CardActor : MonoBehaviour, IHoverable
 
     public void OnStartHover()
     {
+        if(_isBeingHovered)
+            return;
+        
         if (_hoverTween != null)
-        {
             _hoverTween.Kill();
-        }
 
-        _hoverTween = DOTween.Sequence();
-        _hoverTween
-            .Append(_visual.transform.DOScale(Vector3.one * 2, .5f))
-            .Insert(0, _visual.transform.DOLocalMove(new Vector3(0, 1, -5), .25f))
-            .Play();
+        _isBeingHovered = true;
+        var sequence = DOTween.Sequence();
+        sequence
+            .Append(_visual.transform.DOScale(Vector3.one * 2, hoverAnimDuration))
+            .Insert(0, _visual.transform.DOLocalMove(new Vector3(0, 1, -5), hoverAnimDuration));
+            
+        _hoverTween = sequence.Play();
     }
 
     public void OnEndHover()
@@ -94,11 +103,30 @@ public class CardActor : MonoBehaviour, IHoverable
         {
             _hoverTween.Kill();
         }
+
+        _isBeingHovered = false;
+        var sequence = DOTween.Sequence();
+        sequence
+            .Append(_visual.transform.DOScale(Vector3.one, hoverAnimDuration))
+            .Insert(0, _visual.transform.DOLocalMove(Vector3.zero, hoverAnimDuration));
+            
+        _hoverTween = sequence.Play();
+    }
+
+    public void OnGrab()
+    {
+        OnEndHover();
         
-        _hoverTween = DOTween.Sequence();
-        _hoverTween
-            .Append(_visual.transform.DOScale(Vector3.one, .5f))
-            .Insert(0, _visual.transform.DOLocalMove(Vector3.zero, .25f))
+        _grabTween = transform
+            .DORotate(Quaternion.identity.eulerAngles, grabAnimDuration)
             .Play();
+
+        _collider.enabled = false;
+    }
+
+    public void OnRelease()
+    {
+        _grabTween.Kill();
+        _collider.enabled = true;
     }
 }
