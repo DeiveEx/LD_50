@@ -46,6 +46,7 @@ public class CardActor : MonoBehaviour, IHoverable, IGrabable
     public string Description;
     public float hoverAnimDuration;
     public float grabAnimDuration;
+    public ICardHolder currentHolder;
 
     public List<FAttributeSetup> Attributes;
 

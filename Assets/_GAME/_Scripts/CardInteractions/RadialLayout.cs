@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class RadialLayout : MonoBehaviour
+public class RadialLayout : MonoBehaviour, ICardHolder
 {
     [SerializeField] private float _anglePivot;
     [SerializeField] private float _maxRange;
@@ -16,50 +16,63 @@ public class RadialLayout : MonoBehaviour
     [SerializeField] private float _animDuration;
     [SerializeField] private Ease _animEase;
     
-    private List<Transform> _items = new List<Transform>();
+    private List<CardActor> _cards = new List<CardActor>();
     private float _startAngle;
     private float _endAngle;
 
-    public List<Transform> Items => _items;
+    public IList<CardActor> Cards => _cards;
     public int MaxItems
     {
         get => _maxItems;
         set => _maxItems = value;
     }
 
-    public event EventHandler<Transform> onItemAddedSuccess;
-    public event EventHandler<Transform> onItemRemoved;
-    public event EventHandler<Transform> onItemAddedFailed;
+    public event EventHandler<CardActor> onCardAddedSuccess;
+    public event EventHandler<CardActor> onCardRemoved;
+    public event EventHandler<CardActor> onCardAddedFailed;
 
-    public bool AddItem(Transform itemToAdd)
+    public bool AddCard(CardActor card)
     {
-        if (_items.Count >= _maxItems)
+        if (_cards.Count >= _maxItems)
         {
-            onItemAddedFailed?.Invoke(this, itemToAdd);
+            onCardAddedFailed?.Invoke(this, card);
             return false;
         }
         
-        _items.Add(itemToAdd);
-        itemToAdd.SetParent(transform);
-        UpdateItemPositions();
-        onItemAddedSuccess?.Invoke(this, itemToAdd);
+        _cards.Add(card);
+        card.currentHolder = this;
+        card.transform.SetParent(transform);
+        UpdateCardPositions();
+        onCardAddedSuccess?.Invoke(this, card);
         return true;
     }
 
-    public void RemoveItem(Transform itemToRemove)
+    public bool RemoveCard(CardActor card)
     {
-        if (_items.Remove(itemToRemove))
+        if (_cards.Remove(card))
         {
-            itemToRemove.DOKill(); //TODO we might want to remove this if we want to have some other animation when removing cards
-            UpdateItemPositions();
-            onItemRemoved?.Invoke(this, itemToRemove);
+            card.DOKill(); //TODO we might want to remove this if we want to have some other animation when removing cards
+            UpdateCardPositions();
+            onCardRemoved?.Invoke(this, card);
+            return true;
         }
+
+        return false;
     }
 
-    public void UpdateItemPositions()
+    public CardActor GetCardAtPosition(int position)
+    {
+        if (position >= _cards.Count)
+            return null;
+
+        var card = _cards[position];
+        return card;
+    }
+
+    public void UpdateCardPositions()
     {
         //We want a single card to be centered, but more than one should be spread
-        int count = _items.Count <= 1 ? 0 : _items.Count;
+        int count = _cards.Count <= 1 ? 0 : _cards.Count;
         
         //here we redefine the range of the spread accordingly to the amount of cards
         float currentRange = Mathf.Lerp(0, _maxRange, count / (float) _maxItems);
@@ -67,12 +80,12 @@ public class RadialLayout : MonoBehaviour
         _endAngle = _startAngle + currentRange;
         
         //If we only have one card, we can't subtract or else we'd be trying to divide by zero
-        int correction = _items.Count <= 1 ? 0 : 1;
-        float step = (_endAngle - _startAngle) / (float)(_items.Count - correction);
+        int correction = _cards.Count <= 1 ? 0 : 1;
+        float step = (_endAngle - _startAngle) / (float)(_cards.Count - correction);
         
-        for (int i = 0; i < _items.Count; i++)
+        for (int i = 0; i < _cards.Count; i++)
         {
-            var item = _items[i];
+            var item = _cards[i];
             
             float cardAngleDeg = _startAngle + (step * i);
             float cardAngleRad = cardAngleDeg * Mathf.Deg2Rad;
@@ -83,10 +96,10 @@ public class RadialLayout : MonoBehaviour
             // item.position = transform.position + cardOffset;
             // item.up = cardOffset.normalized;
 
-            item.DOMove(transform.position + cardOffset, _animDuration)
+            item.transform.DOMove(transform.position + cardOffset, _animDuration)
                 .SetEase(_animEase)
                 .Play();
-            item.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, _animDuration)
+            item.transform.DORotate(Quaternion.AngleAxis(cardAngleDeg - 90, Vector3.forward).eulerAngles, _animDuration)
                 .SetEase(_animEase)
                 .Play();
         }
@@ -97,7 +110,7 @@ public class RadialLayout : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            UpdateItemPositions();
+            UpdateCardPositions();
         }
     }
 
@@ -105,7 +118,7 @@ public class RadialLayout : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            float currentRange = Mathf.Lerp(0, _maxRange, _items.Count / (float) _maxItems);
+            float currentRange = Mathf.Lerp(0, _maxRange, _cards.Count / (float) _maxItems);
             DrawArc(currentRange, Color.white, 5);
         }
         else

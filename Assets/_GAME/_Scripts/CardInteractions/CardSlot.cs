@@ -2,49 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardSlot : MonoBehaviour
+public class CardSlot : MonoBehaviour, ICardHolder
 {
     [SerializeField] private int _maxCards = 1;
     [SerializeField] private float _spacing;
     [SerializeField] private List<CardActor> _cards = new List<CardActor>();
 
-    public bool TryAddCardToSlot(CardActor card)
+    public IList<CardActor> Cards => _cards;
+
+    public bool AddCard(CardActor card)
     {
         if (_cards.Count >= _maxCards)
             return false;
         
         _cards.Add(card);
         card.transform.SetParent(transform);
+        card.currentHolder = this;
         OnCardAdded(card);
         UpdateCardPositions();
         return true;
     }
 
-    public CardActor GetCardFromSlot(int id = 0)
+    public bool RemoveCard(CardActor card)
     {
-        if (id >= _cards.Count)
+        if (_cards.Remove(card))
+        {
+            OnCardRemoved(card);
+            UpdateCardPositions();
+        }
+
+        return false;
+    }
+
+    public CardActor GetCardAtPosition(int position)
+    {
+        if (position >= _cards.Count)
             return null;
 
-        var card = _cards[id];
-        _cards.RemoveAt(id);
-        OnCardRemoved(card);
-        UpdateCardPositions();
+        var card = _cards[position];
         return card;
     }
-
-    protected virtual void OnCardAdded(CardActor card)
-    {
-        Debug.Log($"Card [{card.name}] added to slot [{this.name}]");
-        //Do something...
-    }
-
-    protected virtual void OnCardRemoved(CardActor card)
-    {
-        Debug.Log($"Card [{card.name}] removed to slot [{this.name}]");
-        //Do something...
-    }
-
-    protected virtual void UpdateCardPositions()
+    
+    public virtual void UpdateCardPositions()
     {
         float range = _cards.Count * _spacing;
         
@@ -57,5 +56,17 @@ public class CardSlot : MonoBehaviour
                 .1f * i);
             card.transform.position = transform.position + offset;
         }
+    }
+
+    protected virtual void OnCardAdded(CardActor card)
+    {
+        Debug.Log($"Card [{card.name}] added to slot [{this.name}]");
+        //Do something...
+    }
+
+    protected virtual void OnCardRemoved(CardActor card)
+    {
+        Debug.Log($"Card [{card.name}] removed to slot [{this.name}]");
+        //Do something...
     }
 }

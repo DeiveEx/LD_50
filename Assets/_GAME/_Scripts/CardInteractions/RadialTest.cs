@@ -7,12 +7,12 @@ using Random = UnityEngine.Random;
 
 public class RadialTest : MonoBehaviour
 {
-    [SerializeField] private Transform _cardPrefab;
+    [SerializeField] private CardActor _cardPrefab;
     [SerializeField] private int _startAmount;
     [SerializeField] private RadialLayout _radialLayout;
     [SerializeField] private Transform _cardOrigin;
 
-    private List<Transform> _cards = new List<Transform>();
+    private List<CardActor> _cards = new List<CardActor>();
     private int cardCount;
 
     private void Awake()
@@ -20,9 +20,9 @@ public class RadialTest : MonoBehaviour
         if (_cardOrigin == null)
             _cardOrigin = transform;
         
-        _radialLayout.onItemAddedSuccess += (sender, card) => Debug.Log("Card added");
-        _radialLayout.onItemAddedFailed += (sender, card) => Debug.Log("Card could not be added");
-        _radialLayout.onItemRemoved += (sender, card) => Debug.Log("Card removed");
+        _radialLayout.onCardAddedSuccess += (sender, card) => Debug.Log("Card added");
+        _radialLayout.onCardAddedFailed += (sender, card) => Debug.Log("Card could not be added");
+        _radialLayout.onCardRemoved += (sender, card) => Debug.Log("Card removed");
     }
 
     private void Start()
@@ -45,11 +45,11 @@ public class RadialTest : MonoBehaviour
     private void AddCard()
     {
         //Ideally we would check if the amount of cards already reached the limit, but I wanna test the events
-        Transform card = Instantiate(_cardPrefab);
+        var card = Instantiate(_cardPrefab);
         card.gameObject.SetActive(true);
         card.transform.position = _cardOrigin.position;
 
-        if (_radialLayout.AddItem(card))
+        if (_radialLayout.AddCard(card))
         {
             _cards.Add(card);
             
@@ -69,7 +69,7 @@ public class RadialTest : MonoBehaviour
             return;
 
         int cardID = Random.Range(0, _cards.Count);
-        _radialLayout.RemoveItem(_cards[cardID]);
+        _radialLayout.RemoveCard(_cards[cardID]);
         Destroy(_cards[cardID].gameObject);
         _cards.RemoveAt(cardID);
     }
