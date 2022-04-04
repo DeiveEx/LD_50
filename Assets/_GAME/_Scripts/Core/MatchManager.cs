@@ -18,6 +18,7 @@ public class MatchManager : Singleton<MatchManager>
 
     private PlayerController _player;
 
+    [SerializeField]
     private MatchStage currentStage;
 
     [Header("Gameplay Framework Templates")]

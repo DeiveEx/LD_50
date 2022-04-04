@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1172613590603834952
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3687477344184890228, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_text
+      value: Lettuce
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438447715243979406, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: CardName
+      value: Lettuce
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: CardImage
+      value: 
+      objectReference: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: Description
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: Attributes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: Attributes.Array.data[0].Value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: Attributes.Array.data[1].Value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5468937194570044423, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: Attributes.Array.data[0].Attribute
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6124624719680151545, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 6841379540570669052, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_text
+      value: bbb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7615865910057030865, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}
+      propertyPath: m_Name
+      value: CA_Lettuce
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23b8a9124e8701c44b03c5608528426c, type: 3}

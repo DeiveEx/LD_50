@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class MatchStage
 {
-    List<DishActor> dishes;
+     List<SORecipe> dishes;
 
     MatchRound currentRound;
 
@@ -13,6 +14,11 @@ public class MatchStage
     //TODO: This props are redundant, could be only one
     int roundCount;
     int amountOfRoundsLeft = 3;
+
+    public MatchStage(/*SORecipe recipe*/)
+    {
+        
+    }
 
     public void StartStage()
     {

@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class MatchRound
 {
-    DishActor roundDish;
+    SORecipe roundRecipe;
 
-    int amountOfRoundsLeft = 3;
+    int amountOfTurnsLeft = 3;
 
     public SimpleCallEvent OnRoundEnd;
 
+    public List<FAttributeSetup> ingredientsUsed;
+
     //CaldronSlot dishSlot // Uncomment here;
-    public MatchRound(DishActor dish, SimpleCallEvent onRoundEnd)
+    public MatchRound(SORecipe dish, SimpleCallEvent onRoundEnd)
     {
         OnRoundEnd = onRoundEnd;
         if (dish != null)
         {
-            roundDish = dish;
-            amountOfRoundsLeft = dish.TurnsToCook;
+            roundRecipe = dish;
+            amountOfTurnsLeft = dish.turns;
         }
     }
 
@@ -31,15 +33,15 @@ public class MatchRound
     public void StartPlayerTurn()
     {
         Debug.Log("New Turn Started");
-        amountOfRoundsLeft--;
+        amountOfTurnsLeft--;
 
         //TODO: Remove:
-        EndPlayerTurn();
+        //EndPlayerTurn();
     }
 
     public void EndPlayerTurn()
     {
-        if (amountOfRoundsLeft > 0)
+        if (amountOfTurnsLeft > 0)
             StartPlayerTurn();
         else
             EndRound();
