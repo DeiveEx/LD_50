@@ -22,10 +22,10 @@ public class MatchStage
 
     public void StartStage()
     {
-        Debug.Log("A new day comes, it's sunny outside, time to cook");
         if(amountOfRoundsLeft > 0)
         {
-            StartNewRound();
+            GameplayMessage.instance.ShowMessageWithCallback("A new day comes, it's sunny outside, time to cook", 3.0f, StartNewRound);
+            //StartNewRound();
         }
     }
 

@@ -25,15 +25,15 @@ public class MatchRound
     }
 
     public void StartRound()
-    {
-        Debug.Log("New Round Started");
+    {   
         //update dish board and stuff
-        StartPlayerTurn();
+        GameplayMessage.instance.ShowMessageWithCallback("New Round Started", 1.0f, StartPlayerTurn);
     }
 
     public void StartPlayerTurn()
     {
-        Debug.Log("New Turn Started");
+        //Debug.Log();
+        GameplayMessage.instance.ShowMessage("New Turn Started", 1.0f);
         amountOfTurnsLeft--;
 
         FillPlayerHand();
