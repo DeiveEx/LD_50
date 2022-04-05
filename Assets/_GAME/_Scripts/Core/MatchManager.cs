@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public delegate void SimpleCallEvent();
@@ -23,6 +25,7 @@ public class MatchManager : Singleton<MatchManager>
     public RadialLayout cardHandHolder;
     public Transform deckOrigin;
     public PlateSlot Plate;
+    public TMP_Text recipeText;
 
     [Header("Gameplay Objects")]
     //TODO: This object references could be store in a data structure class. (GlobalSettings-like class?)
@@ -79,5 +82,12 @@ public class MatchManager : Singleton<MatchManager>
         playerController.cardHandHolder.AddCard(card);
         
         return true;
+    }
+
+    public void UpdateRecipeText(SORecipe recipe, int turnsLeft)
+    {
+        string requirements = string.Join(";\n", recipe.ingredients.Select(x => $"{x.Attribute}: {x.Value}"));
+        
+        recipeText.text = $"{recipe.dishName} - Turns left: {turnsLeft + 1}\nRequirements:\n{requirements}";
     }
 }

@@ -13,7 +13,6 @@ public class MatchRound
 
     public List<FAttributeSetup> ingredientsUsed;
 
-    //CaldronSlot dishSlot // Uncomment here;
     public MatchRound(SORecipe dish, SimpleCallEvent onRoundEnd)
     {
         OnRoundEnd = onRoundEnd;
@@ -22,6 +21,8 @@ public class MatchRound
             roundRecipe = dish;
             amountOfTurnsLeft = dish.turns;
         }
+        
+        Debug.Log($"Current recipe is: {roundRecipe.name}");
     }
 
     public void StartRound()
@@ -37,6 +38,7 @@ public class MatchRound
         amountOfTurnsLeft--;
 
         FillPlayerHand();
+        MatchManager.instance.UpdateRecipeText(roundRecipe, amountOfTurnsLeft);
     }
 
     public void EndPlayerTurn()
