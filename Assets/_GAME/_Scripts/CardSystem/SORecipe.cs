@@ -37,6 +37,6 @@ public class SORecipe : ScriptableObject
             // }
         }
 
-        return true;
+        return false;
     }
 }

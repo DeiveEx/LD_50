@@ -57,14 +57,13 @@ public class MatchRound
             {
                 //Add points
                 Debug.Log("Congrats");
+                EndRound();
             }
             else
             {
-                Debug.Log("On no, your dish was cursed!");
-                //Remove points
+                GameplayMessage.instance.ShowMessageWithCallback("On no, your dish was cursed!", 1.0f, EndRound);
+                MatchManager.instance.playerController.SickPeople(10);
             }
-            
-            EndRound();
         }
     }
 

@@ -50,9 +50,10 @@ public class PlayerController : MonoBehaviour
     public void SickPeople(int Amount)
     {
         _sickness += Amount;
-        _sickness = Mathf.Min(_sickness, 100);
-        text.text = "SICKNESS: " + _sickness.ToString() + "/100";
-        if(_sickness == 100)
+        int maxLife = 30;
+        _sickness = Mathf.Min(_sickness, maxLife);
+        text.text = "SICKNESS: " + _sickness.ToString() + "/" + maxLife.ToString();
+        if(_sickness == maxLife)
         {
             GameplayMessage.instance.ShowMessageWithCallback("Everybody is sick now :c", 2.0f, EndGame);
         }
