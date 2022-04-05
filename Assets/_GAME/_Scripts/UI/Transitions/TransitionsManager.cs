@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace _GAME._Scripts.UI.Transitions
         [SerializeField] private AnimationCurve defaultCurve;
         [SerializeField] private float defaultSpeed;
 
-        private void OnEnable() => 
+        private void OnEnable() =>
             transitionImage.raycastTarget = false;
 
         private bool _isTransitioning;
@@ -22,14 +23,21 @@ namespace _GAME._Scripts.UI.Transitions
             if (curve.length == 0) curve = defaultCurve;
 
             if (_isTransitioning) return false;
-            
+
             _isTransitioning = true;
             await type.Apply(transitionImage, curve, speed);
             _isTransitioning = false;
-            
+
             transitionImage.raycastTarget = false;
 
             return true;
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            transitionImage.enabled = EditorApplication.isPlaying;
+        }
+#endif
     }
 }
