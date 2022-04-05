@@ -15,28 +15,21 @@ public delegate void SimpleCallEvent();
 /// </summary>
 public class MatchManager : Singleton<MatchManager>
 {
-
-    private PlayerController _player;
-
     [SerializeField]
     private MatchStage currentStage;
 
     [Header("Gameplay Framework Templates")]
-    public PlayerController PlayerPrefab;
+    public PlayerController playerController;
+    public RadialLayout cardHandHolder;
+    public Transform deckOrigin;
 
     [Header("Gameplay Objects")]
     //TODO: This object references could be store in a data structure class. (GlobalSettings-like class?)
-    public List<DishActor> Dishes;
-    public List<CardActor> Cards;
-
-    public PlayerController GetPlayerController()
-    {
-        return _player;
-    }
+    public List<SORecipe> Recipes;
 
     public void Start()
     {
-        _player = Instantiate(PlayerPrefab);
+        playerController.cardHandHolder = cardHandHolder;
         StartMatch();
     }
 
@@ -67,8 +60,23 @@ public class MatchManager : Singleton<MatchManager>
        return currentStage.GetCurrentRound();
     }
 
+    public void EndTurn()
+    {
+        currentStage.EndTurn();
+    }
 
-
-
-
+    public bool AddCardToPlayerHand()
+    {
+        if (playerController.cardHandHolder.Cards.Count >= playerController.cardHandHolder.MaxCards)
+            return false;
+        
+        int cardId = Random.Range(0, playerController.Deck.Count);
+        
+        var card = Instantiate(playerController.Deck[cardId]);
+        card.gameObject.SetActive(true);
+        card.transform.position = deckOrigin.position;
+        playerController.cardHandHolder.AddCard(card);
+        
+        return true;
+    }
 }

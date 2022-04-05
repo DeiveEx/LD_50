@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DishActor : MonoBehaviour
+public class DishActor
 {
     public int TurnsToCook
     {
@@ -46,7 +46,7 @@ public class DishActor : MonoBehaviour
         {
             if(ingredientsUsed.Count == 0)
             {
-                print("No Ingredient used");
+                Debug.Log("No Ingredient used");
                 return false;
             }
 
@@ -76,12 +76,12 @@ public class DishActor : MonoBehaviour
             if (!ingredientFound)
             {
                 //No Match
-                print("Ingredient Missing: " + recipe.ingredients[i].Attribute);
+                Debug.Log("Ingredient Missing: " + recipe.ingredients[i].Attribute);
                 return false;
             }
         }
 
-        print("Recipe Completed");
+        Debug.Log("Recipe Completed");
         return true;
     }
 

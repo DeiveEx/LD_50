@@ -14,11 +14,11 @@ public class PlayerController : MonoBehaviour
 {
     public List<CardActor> Deck;
 
-    public List<CardActor> Hand;
-
     public int Cash;
 
     public int Popularity;
+
+    public ICardHolder cardHandHolder;
 
     private bool bLocked;
 

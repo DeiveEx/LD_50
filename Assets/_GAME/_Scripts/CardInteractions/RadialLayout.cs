@@ -11,7 +11,7 @@ public class RadialLayout : MonoBehaviour, ICardHolder
     [SerializeField] private float _anglePivot;
     [SerializeField] private float _maxRange;
     [SerializeField] private Vector2 _ellipseSize;
-    [SerializeField] private int _maxItems;
+    [SerializeField] private int _maxCards;
     [SerializeField] private float _hoverScale = 2;
     [SerializeField] private Vector3 _hoverOffeset = new Vector3(0, 0, -5);
     [SerializeField] private float _zOffset;
@@ -27,11 +27,12 @@ public class RadialLayout : MonoBehaviour, ICardHolder
     public float HoverScale => _hoverScale;
     public Vector3 HoverOffset => _hoverOffeset;
     public bool AllowGrabbing => _allowGrabbing;
+    public int MaxCards => _maxCards;
 
     public int MaxItems
     {
-        get => _maxItems;
-        set => _maxItems = value;
+        get => _maxCards;
+        set => _maxCards = value;
     }
 
     public event EventHandler<CardActor> onCardAddedSuccess;
@@ -40,7 +41,7 @@ public class RadialLayout : MonoBehaviour, ICardHolder
 
     public bool AddCard(CardActor card)
     {
-        if (_cards.Count >= _maxItems)
+        if (_cards.Count >= _maxCards)
         {
             onCardAddedFailed?.Invoke(this, card);
             return false;
@@ -82,7 +83,7 @@ public class RadialLayout : MonoBehaviour, ICardHolder
         int count = _cards.Count <= 1 ? 0 : _cards.Count;
         
         //here we redefine the range of the spread accordingly to the amount of cards
-        float currentRange = Mathf.Lerp(0, _maxRange, count / (float) _maxItems);
+        float currentRange = Mathf.Lerp(0, _maxRange, count / (float) _maxCards);
         _startAngle = _anglePivot - (currentRange / 2f);
         _endAngle = _startAngle + currentRange;
         
@@ -123,7 +124,7 @@ public class RadialLayout : MonoBehaviour, ICardHolder
     {
         if (Application.isPlaying)
         {
-            float currentRange = Mathf.Lerp(0, _maxRange, _cards.Count / (float) _maxItems);
+            float currentRange = Mathf.Lerp(0, _maxRange, _cards.Count / (float) _maxCards);
             DrawArc(currentRange, Color.white, 5);
         }
         else
