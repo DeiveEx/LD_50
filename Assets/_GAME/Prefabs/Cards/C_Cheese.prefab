@@ -73,7 +73,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7759603085511128794, guid: 976205d32c158864684702641c2f5227, type: 3}
       propertyPath: Attributes.Array.data[0].Attribute
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 976205d32c158864684702641c2f5227, type: 3}

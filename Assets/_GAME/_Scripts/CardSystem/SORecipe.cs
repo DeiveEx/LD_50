@@ -23,20 +23,30 @@ public class SORecipe : ScriptableObject
             return false;
         }
 
+        int points = ingredients.Count;
+        
         // For each recipe ingredient
         for (int i = 0; i < ingredients.Count; i++)
         {
-            // var used = ingredientsUsed.FirstOrDefault(x => x.Attribute == ingredients[i].Attribute);
-            // if (used != null)
-            // {
-            //     
-            // }
-            // else
-            // {
-            //     return false;
-            // }
+            if (ingredientsUsed.Any(x => x.Attribute == ingredients[i].Attribute))
+            {
+                var used = ingredientsUsed.First(x => x.Attribute == ingredients[i].Attribute || x.Attribute == ECardAttribute.CA_Wild);
+
+                if (used.Value >= ingredients[i].Value)
+                {
+                    points--;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        return false;
+        return points == 0;
     }
 }

@@ -28,7 +28,6 @@ public class PlateSlot : CardSlot
         Debug.Log("=== Clearing plate");
         while (Cards.Count > 0)
         {
-            Debug.Log("a");
             Destroy(Cards[0].gameObject);
             Cards.RemoveAt(0);
         }
