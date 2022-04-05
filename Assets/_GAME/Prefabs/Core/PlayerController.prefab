@@ -364,7 +364,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10/10
+  m_text: 'SICKNESS: 0/100'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 87255031caa7c4747b6564b7cf4a778d, type: 2}
   m_sharedMaterial: {fileID: 1042693726397135592, guid: 87255031caa7c4747b6564b7cf4a778d, type: 2}
