@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Gameplay Message
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 87255031caa7c4747b6564b7cf4a778d, type: 2}
+  m_sharedMaterial: {fileID: 1042693726397135592, guid: 87255031caa7c4747b6564b7cf4a778d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

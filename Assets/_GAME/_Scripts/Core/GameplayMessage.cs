@@ -18,8 +18,9 @@ public class GameplayMessage : Singleton<GameplayMessage>
 
     private SimpleCallEvent _onFinish;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         _animController = GetComponent<Animator>();
         gameObject.SetActive(false);
     }
@@ -62,12 +63,11 @@ public class GameplayMessage : Singleton<GameplayMessage>
     {
         yield return new WaitForSeconds(duration);
         _animController.Play("FadeOut");
-        yield return new WaitForSeconds(0.20f);
+        yield return new WaitForSeconds(0.50f);
         gameObject.SetActive(false);
         if(showCallback)
         {
             _onFinish();
-            _onFinish = null;
         }    
     }
 
