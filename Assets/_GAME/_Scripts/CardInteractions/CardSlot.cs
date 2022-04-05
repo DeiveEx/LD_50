@@ -9,6 +9,7 @@ public class CardSlot : MonoBehaviour, ICardHolder
     [SerializeField] private float _spacing;
     [SerializeField] private float _hoverScale = 1;
     [SerializeField] private Vector3 _hoverOffset = new Vector3(0, 0, -5);
+    [SerializeField] private float cardZPosition;
     [SerializeField] private float _animDuration;
     [SerializeField] private Ease _animEase;
     [SerializeField] private bool _allowGrabbing;
@@ -64,7 +65,7 @@ public class CardSlot : MonoBehaviour, ICardHolder
             var offset = new Vector3(
                 (_spacing * i) - (range / 2f),
                 0,
-                1 + (.1f * i));
+                cardZPosition + (.1f * i));
             
             card.transform.DOMove(transform.position + offset, _animDuration)
                 .SetEase(_animEase)

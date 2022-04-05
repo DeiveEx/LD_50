@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MatchRound
 {
-    SORecipe roundRecipe;
+    public SORecipe roundRecipe;
 
     int amountOfTurnsLeft = 3;
 
@@ -42,10 +42,30 @@ public class MatchRound
     public void EndPlayerTurn()
     {
         if (amountOfTurnsLeft > 0)
-            StartPlayerTurn();
+            if (MatchManager.instance.Plate.IsDishCorrect())
+            {
+                EndRound();
+                //Add points
+            }
+            else
+            {
+                StartPlayerTurn();
+            }
         else
+        {
+            if (MatchManager.instance.Plate.IsDishCorrect())
+            {
+                //Add points
+                Debug.Log("Congrats");
+            }
+            else
+            {
+                Debug.Log("On no, your dish was cursed!");
+                //Remove points
+            }
+            
             EndRound();
-
+        }
     }
 
     public void EndRound()

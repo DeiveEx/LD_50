@@ -16,12 +16,13 @@ public delegate void SimpleCallEvent();
 public class MatchManager : Singleton<MatchManager>
 {
     [SerializeField]
-    private MatchStage currentStage;
+    public MatchStage currentStage;
 
     [Header("Gameplay Framework Templates")]
     public PlayerController playerController;
     public RadialLayout cardHandHolder;
     public Transform deckOrigin;
+    public PlateSlot Plate;
 
     [Header("Gameplay Objects")]
     //TODO: This object references could be store in a data structure class. (GlobalSettings-like class?)

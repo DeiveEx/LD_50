@@ -31,6 +31,8 @@ public class MatchStage
 
     public void StartNewRound()
     {
+        MatchManager.instance.Plate.ClearPlate();
+        
         amountOfRoundsLeft--;
         var recipes = MatchManager.instance.Recipes;
         int recipeID = Random.Range(0, recipes.Count);
