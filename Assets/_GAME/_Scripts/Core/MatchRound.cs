@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MatchRound
@@ -35,8 +36,7 @@ public class MatchRound
         Debug.Log("New Turn Started");
         amountOfTurnsLeft--;
 
-        //TODO: Remove:
-        //EndPlayerTurn();
+        FillPlayerHand();
     }
 
     public void EndPlayerTurn()
@@ -52,5 +52,16 @@ public class MatchRound
     {
         Debug.Log("Round ended");
         OnRoundEnd();
+    }
+
+    private async void FillPlayerHand()
+    {
+        var playerHand = MatchManager.instance.playerController.cardHandHolder;
+        while (playerHand.Cards.Count < playerHand.MaxCards)
+        {
+            Debug.Log("Adding card");
+            MatchManager.instance.AddCardToPlayerHand();
+            await Task.Delay(200);
+        }
     }
 }

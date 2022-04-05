@@ -19,6 +19,7 @@ public class CardSlot : MonoBehaviour, ICardHolder
     public float HoverScale => _hoverScale;
     public Vector3 HoverOffset => _hoverOffset;
     public bool AllowGrabbing => _allowGrabbing;
+    public int MaxCards => _maxCards;
 
     public bool AddCard(CardActor card)
     {

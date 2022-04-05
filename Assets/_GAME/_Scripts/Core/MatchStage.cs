@@ -32,7 +32,9 @@ public class MatchStage
     public void StartNewRound()
     {
         amountOfRoundsLeft--;
-        currentRound = new MatchRound(null, EndRound);
+        var recipes = MatchManager.instance.Recipes;
+        int recipeID = Random.Range(0, recipes.Count);
+        currentRound = new MatchRound(recipes[recipeID], EndRound);
         currentRound.StartRound();
         roundCount++;
     }
@@ -68,5 +70,8 @@ public class MatchStage
         return currentRound;
     }
 
-
+    public void EndTurn()
+    {
+        currentRound.EndPlayerTurn();
+    }
 }

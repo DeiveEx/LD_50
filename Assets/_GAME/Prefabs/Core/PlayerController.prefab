@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &860225213846169317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2164497630724025318}
+  - component: {fileID: 473452170782998916}
+  m_Layer: 0
+  m_Name: HandPivot3D
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2164497630724025318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 860225213846169317}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -18, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5639303294077012056}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &473452170782998916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 860225213846169317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65d6ce206d5d25c449281b8deb6c4b0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _anglePivot: 90
+  _maxRange: 30
+  _ellipseSize: {x: 10, y: 15}
+  _maxCards: 5
+  _hoverScale: 2
+  _hoverOffeset: {x: 0, y: 1.5, z: -5}
+  _zOffset: 0.1
+  _animDuration: 0.25
+  _animEase: 0
+  _allowGrabbing: 1
 --- !u!1 &2613024041291007727
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,6 +63,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5639303294077012056}
   - component: {fileID: 452395857934288443}
+  - component: {fileID: -333610337791973550}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -25,9 +79,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2613024041291007727}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1061.2982, y: 582.60126, z: -594.54877}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2164497630724025318}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -64,6 +119,25 @@ MonoBehaviour:
   - {fileID: 6602387821266760271, guid: 9c79fa506db00e748b3933f6860e6ba5, type: 3}
   - {fileID: 6602387821266760271, guid: 9c79fa506db00e748b3933f6860e6ba5, type: 3}
   - {fileID: 6602387821266760271, guid: 9c79fa506db00e748b3933f6860e6ba5, type: 3}
-  Hand: []
   Cash: 0
   Popularity: 0
+--- !u!114 &-333610337791973550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613024041291007727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4684ef239b02841af6bc0ad00f5e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _slotMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _cardFollowSpeed: 10
+  _heldPositionZ: -5
